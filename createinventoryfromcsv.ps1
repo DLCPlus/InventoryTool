@@ -6,8 +6,8 @@
 
 #build auth headers for shop
 $uri = "https://dlcplus.myshopify.com/admin/products.json"
-$apikey = "73570d7b028bd149b66f4b29b356b4d9"
-$password = "d7237220f5541176bf4dfadb4b786f19"
+$apikey = ""
+$password = ""
 $headers = @{"Authorization"  = "Basic " + [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($apikey+":"+$password))}
 
 #set the location for the csv file
