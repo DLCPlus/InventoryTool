@@ -1,0 +1,20 @@
+#exportinventoryitems: take all itms from shopify shop and export them into a local CSV file.
+
+
+#build auth headers for shop
+$uri = "https://dlcplus.myshopify.com/admin/products.json"
+$apikey = ""
+$password = ""
+$headers = @{"Authorization"  = "Basic " + [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($apikey+":"+$password))}
+
+
+$products = Invoke-RestMethod -Uri $uri -contentType 'application/json' -Method Get -Headers $headers 
+
+
+ForEach($products in $products){
+$products.products |Select-Object -Property id,title,body_html , vendor , created_at , updated_at , published_at , @{label='pize' ; expression={$_.variants.price}} | Export-Csv "C:\Users\Sean\Desktop\inventorylisting1.csv" -NoTypeInformation
+
+}
+
+
+
