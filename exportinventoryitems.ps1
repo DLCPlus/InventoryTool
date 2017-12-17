@@ -11,48 +11,56 @@ $headers = @{"Authorization"  = "Basic " + [System.Convert]::ToBase64String([Sys
 #make request for information from shopify 
 $products = Invoke-RestMethod -Uri $uri -contentType 'application/json' -Method Get -Headers $headers 
 
-#create variables to hold parts of json as we flatten it out
-$imagescount = $products.products.images.Count
-$optionscount = $products.products.options.Count
 
-   
+    $mainobject = $products.products
+    $variants = $products.products.variants
+    $options = $products.products.options
+    $images = $products.products.images 
 
-#First for loop , we're going to go through each product and parse out the arrays in variants and options and images
 For($u=0 ; $u -le ($products.products.Count-1) ; $u++){
+    
+    $mainobject = $products.products[$u]
+    $vararray=@() 
+    $oparray=@()
+    $imgarray=@()
 
-$mainobject = $products.products[$u]
-$subvar = $products.products[$u].variants 
-$mainobject | Select-Object @{l="product_id";e={$_.id}} ,@{l="variant_id";e={$subvar[$i].id}},  price , inventory_quantity
+    For($r=0; $r -le ($products.products.variants.Count-1) ; $r++){
+    
+        if($products.products[$u].id -eq $variants[$r].product_id){
+         $vararray += $variants[$r] 
 
-For($i=0;$i -le ($products.products.variants.Count-1) ; $i ++){
- 
-if($products.products[$u].id -eq $subvar[$i].product_id){
+        }
+        else{
+        
 
+        }
 
-$subvar[$i] 
+    }
 
+    For($q=0; $q -le ($products.products.options.Count-1) ; $q++){
+        
+        if($products.products[$u].id -eq $options[$q].product_id){
+        $oparray += $options[$q]
+                 
+        }
+        else{
+        
+        
+        }}
 
+    For($i=0; $i -le ($products.products.images.Count-1) ; $i++){
+    
+        if($products.products[$u].id -eq $images[$i].product_id){
+        $imgarray += $images[$i]
+        
+        }
+        else{}
+    
+    }
+    
+
+  
+  $mainobject , $vararray , $oparray, $imgarray | Format-Table @{label='id';e={$mainobject.id}} , price , updated_at , inventory_quantity , values , src 
 
 }
-else
-{
-
-}
-
-
-
-}
-
-}
-
-
-
-
-
-
-
-
-
-
-
 
