@@ -1,4 +1,4 @@
-#exportinventoryitems: take all itms from shopify shop and output ID and price and quantity of stock(including variants).
+#exportinventoryitems: take all itms from shopify shop and sort through them for further processing.
 
 
 #build auth headers for shop
